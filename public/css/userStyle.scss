@@ -1,0 +1,38 @@
+@import 'reset';
+
+// main
+.underline {
+  font-size: 1.5rem;
+  text-decoration: underline;
+}
+
+h1 {
+  margin: 10vh 0 0 5vw;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+h3 {
+  p{
+    font-size: 1rem;
+    margin: 25px 0 0 8vw;
+  }
+}
+.btn {
+  display: inline-block;
+  width: 60px;
+  height: 35px;
+  background-color: dodgerblue;
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 8px;
+  text-decoration: none;
+  text-shadow: 1px 1px 0px black;
+  box-shadow: none;
+  line-height: 35px;
+  text-align: center;
+}
+
+.writeBoard {
+  margin: 25px 0 0 5vw;
+}
