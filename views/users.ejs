@@ -10,7 +10,7 @@
 </head>
 
 <body>
-  <h1>유저 정보 확인</h1>
+  <h1>마이페이지</h1>
   <h3>
     <p>
       <span class="underline">
@@ -18,7 +18,12 @@
       </span> 님, 반갑습니다!
     </p>
   </h3>
-  <a href="/board" class="writeBoard btn">글쓰기</a>
+  <a href="/board" class="writeBoard btn">게시판</a>
 </body>
+<script>
+  // console.log(document.cookie);
+  // document.cookie = `user= <%= findUser.name %>; expires=16 Mar 2023 15:27:00 GMT; path=/`;
+  console.log(document.cookie);
+</script>
 
 </html>
