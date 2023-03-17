@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>쿠키 사용하기</title>
+</head>
+
+<body>
+  <h1>쿠키 팔아요</h1>
+  <input type="checkbox" name="check" id="check" onclick="checkField()" />
+  <label for="check">Alert 하루동안 보지 않기</label>
+
+  <script>
+    if (!document.cookie) alert('쿠키 팔아요');
+
+    async function checkField() {
+      const result = await fetch('http://localhost:4000/cookie/cook', {
+        method: 'get',
+        headers: {
+          'Content-type': 'application/json'
+        },
+      });
+      console.log(result);
+      const msg = await result.json();
+      console.log(msg);
+    }
+
+    // Promise
+    // function checkField() {
+    //   fetch('http://localhost:4000/cookie/cook', {
+    //     method: 'get',
+    //     headers: {
+    //       'Content-type': 'application/json'
+    //     },
+    //   }).then((res) => {
+    //     console.log(res);
+    //     return res.json();
+    //   }).then((msg) => {
+    //     console.log(msg);
+    //   })
+    // }
+  </script>
+</body>
+
+</html>

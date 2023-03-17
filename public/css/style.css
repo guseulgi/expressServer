@@ -61,6 +61,17 @@ p {
   margin: 10px 5vw 10px 0;
 }
 
+a {
+  text-decoration: none;
+  display: inline-block;
+  width: 200px;
+  height: 60px;
+  border: 1px solid #ddd;
+  margin: auto;
+  text-align: center;
+  line-height: 60px;
+}
+
 .btn {
   display: inline-block;
   width: 60px;
