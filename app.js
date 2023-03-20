@@ -3,10 +3,10 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+require('dotenv').config();
 
 const app = express();
-
-const PORT = 4000;
+const { PORT } = process.env;
 
 const mainRouter = require('./routes/index');
 const userRouter = require('./routes/users');
@@ -22,15 +22,15 @@ app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(cookieParser('cookie-password'));
 app.use(
   session({
     secret: '1234',
     resave: false,
     saveUninitialized: true,
-    cookie: {
-      maxAge: 1000 * 60 * 60,
-    },
+    // cookie: {
+    //   maxAge: 1000 * 60 * 60,
+    // },
   })
 );
 
