@@ -7,6 +7,31 @@ const client = new MongoClient(uri, {
   serverApi: ServerApiVersion.v1,
 });
 
+async function main() {
+  try {
+    await client.connect();
+    const mongo = client.db('kdt5').collection('member');
+    await mongo.deleteMany({});
+    await mongo.insertMany([
+      { name: '최지영', age: 28 },
+      { name: '홍성범', age: 32 },
+      { name: '김호준', age: 29 },
+      { name: '신상아', age: 31 },
+    ]);
+    await mongo.insertOne({ name: '이유림', age: 26 });
+    await mongo.deleteOne({ name: '홍성범' });
+    await mongo.updateOne(
+      { name: '이유림' },
+      { $set: { name: '홍성범', age: 32 } }
+    );
+    const olderCursor = mongo.find({ age: { $gte: 25 } });
+    const older = await olderCursor.toArray();
+    console.log(older);
+  } catch (err) {
+    console.error(err);
+  }
+}
+main();
 // client.connect((err) => {
 //   const mongo = client.db('kdt5').collection('member');
 //   mongo.deleteMany({}, (deleteErr, deleteResult) => {
@@ -54,24 +79,41 @@ const client = new MongoClient(uri, {
 // });
 
 // insertOne
-client.connect((err) => {
-  const collection = client.db('kdt5').collection('test');
-  collection.deleteMany({}, (deleteErr, deleteResult) => {
-    if (deleteErr) throw deleteErr;
-    console.log(deleteResult);
+// async function main() {
+//   try {
+//     await client.connect();
+//     const test = client.db('kdt5').collection('test');
 
-    collection.insertOne(
-      {
-        name: 'pororo',
-        age: 5,
-      },
-      (insertErr, insertResult) => {
-        if (insertErr) throw insertErr;
-        console.log(insertResult);
-      }
-    );
-  });
-});
+//     await test.deleteMany({});
+//     await test.insertOne({
+//       name: 'pororo',
+//       age: 5,
+//     });
+//   } catch (err) {
+//     console.error(err);
+//   }
+//   client.close();
+// }
+// main();
+
+// client.connect((err) => {
+//   const collection = client.db('kdt5').collection('test');
+//   collection.deleteMany({}, (deleteErr, deleteResult) => {
+//     if (deleteErr) throw deleteErr;
+//     console.log(deleteResult);
+
+//     collection.insertOne(
+//       {
+//         name: 'pororo',
+//         age: 5,
+//       },
+//       (insertErr, insertResult) => {
+//         if (insertErr) throw insertErr;
+//         console.log(insertResult);
+//       }
+//     );
+//   });
+// });
 
 // insertMany
 // client.connect((err) => {
@@ -140,6 +182,26 @@ client.connect((err) => {
 //   );
 // });
 
+// async function main() {
+//   await client.connect();
+//   const test = client.db('kdt5').collection('test');
+
+//   const deleteAllResult = await test.deleteMany({});
+//   if (!deleteAllResult.acknowledged) return '삭제 실패';
+
+//   const insertAllResult = await test.insertMany([
+//     { name: 'pororo', age: 5 },
+//     { name: 'loopy', age: 6 },
+//     { name: 'crong', age: 4 },
+//   ]);
+//   if (!insertAllResult.acknowledged) return '삽입 실패';
+
+//   const deleteManyResult = await test.deleteMany({ age: { $gte: 5 } });
+//   if (!deleteManyResult.acknowledged) return '삭제 실패';
+//   console.log(deleteManyResult);
+// }
+// main();
+
 // update
 // client.connect((err) => {
 //   const collection = client.db('kdt5').collection('test');
@@ -179,6 +241,32 @@ client.connect((err) => {
 //     );
 //   });
 // });
+// async function main() {
+//   await client.connect();
+//   const test = client.db('kdt5').collection('test');
+
+//   const deleteAllResult = await test.deleteMany({});
+//   if (!deleteAllResult.acknowledged) return '삭제 실패';
+
+//   const insertAllResult = await test.insertMany([
+//     { name: 'pororo', age: 5 },
+//     { name: 'loopy', age: 6 },
+//     { name: 'crong', age: 4 },
+//   ]);
+//   if (!insertAllResult.acknowledged) return '삽입 실패';
+
+//   const updateManyResult = await test.updateMany(
+//     { age: { $gte: 5 } },
+//     {
+//       $set: {
+//         name: '5살 이상인 친구들',
+//       },
+//     }
+//   );
+//   if (!updateManyResult.acknowledged) return '삭제 실패';
+//   console.log(updateManyResult);
+// }
+// main();
 
 // updateMany
 // client.connect((err) => {
@@ -253,6 +341,26 @@ client.connect((err) => {
 //     );
 //   });
 // });
+
+// async function main() {
+//   try {
+//     await client.connect();
+//     const test = client.db('kdt5').collection('test');
+//     await test.deleteMany({});
+//     await test.insertMany([
+//       { name: 'pororo', age: 5 },
+//       { name: 'loopy', age: 6 },
+//       { name: 'crong', age: 4 },
+//     ]);
+
+//     const findCursor = test.find({ age: { $gte: 5 } });
+//     const dataArr = await findCursor.toArray();
+//     console.log(dataArr);
+//   } catch (err) {
+//     console.error(err);
+//   }
+// }
+// main();
 
 // find
 // client.connect((err) => {
