@@ -141,8 +141,8 @@
             </div>
             <div class="foot">
               <% if(ARTICLE[i].USERID === userID) { %>
-              <a class="btn orange" href="/dbBoard/modify/<%= ARTICLE[i].ID_PK %>">수정</a>
-              <a class="btn blue" href="#" onclick="deleteArticle('<%= ARTICLE[i].ID_PK %>')">삭제</a>
+              <a class="btn orange" href="/dbBoard/modify/<%= ARTICLE[i]._id %>">수정</a>
+              <a class="btn blue" href="#" onclick="deleteArticle('<%= ARTICLE[i]._id %>')">삭제</a>
               <% } %>
             </div>
           </li>
@@ -169,18 +169,29 @@
   //   return result;
   // }
 
-  function deleteArticle(id) {
-    fetch(`dbBoard/delete/${id}`, {
+  // function deleteArticle(id) {
+  //   fetch(`dbBoard/delete/${id}`, {
+  //     method: 'delete',
+  //     headers: {
+  //       'Content-type': 'application/json'
+  //     },
+  //   }).then((res) => {
+  //     return res.json();
+  //   }).then((msg) => {
+  //     console.log(msg);
+  //     location.href = '/dbBoard';
+  //   });
+  // }
+  async function deleteArticle(id) {
+    const res = await fetch(`dbBoard/delete/${id}`, {
       method: 'delete',
-      headers: {
-        'Content-type': 'application/json'
-      },
-    }).then((res) => {
-      location.href = '/dbBoard';
-      // location.reload();
     });
+    console.log(res);
+    if (res.status !== 200) return alert('통신 실패!');
 
-    // location.reload();
+    const msg = await res.json();
+    console.log(msg);
+    location.reload();
   }
 </script>
 
