@@ -133,7 +133,7 @@
       <div class="board_header">
         <h1>Write Mode</h1>
       </div>
-      <form action="/dbBoard/modify/<%=findArticle._id%>" method="POST" class="board_form">
+      <form action="/dbBoard/modify/<%=findArticle._id%>" method="POST" class="board_form" enctype="multipart/form-data">
         <div class="form_title">
           <h3>제목</h3>
           <input type="text" name="title" value="<%= findArticle.TITLE %>" required />
@@ -141,6 +141,12 @@
         <div class="form_content">
           <h3>내용</h3>
           <textarea name="content" id="content" cols="30" rows="10" required><%= findArticle.CONTENT %></textarea>
+        </div>
+        <div class="form_image">
+          <p>기존 이미지</p>
+          <img src="/uploads/<%= findArticle.IMAGE %>" width="300" />
+          <h3>이미지 수정</h3>
+          <input type="file" name="img" />
         </div>
         <button type="submit">글 수정하기</button>
       </form>

@@ -20,6 +20,7 @@ const loginRouter = require('./routes/login');
 app.use(cors());
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
+app.use('/uploads', express.static('uploads'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser('cookie-password'));
@@ -28,9 +29,6 @@ app.use(
     secret: '1234',
     resave: false,
     saveUninitialized: true,
-    // cookie: {
-    //   maxAge: 1000 * 60 * 60,
-    // },
   })
 );
 

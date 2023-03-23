@@ -1,8 +1,4 @@
-const mongooseConnect = require('./mongooseConnect');
-const User = require('../models/user');
-
-mongooseConnect();
-
+const mongoClient = require('./mongoConnect');
 const REGISTER_SUCCESS_MSG =
   '회원 가입 성공! <br/><br/> <a href="/login">로그인으로 이동</a>';
 const REGISTER_DUPLICATED_MSG =
@@ -22,10 +18,13 @@ const LOGIN_NOT_PASSWORD_MSG =
 // 회원가입
 const registerUser = async (req, res) => {
   try {
-    // const duplicatedUser = await User.findOne({ id: req.body.id });
-    // if (duplicatedUser) return res.status(404).send(REGISTER_DUPLICATED_MSG);
+    const client = await mongoClient.connect();
+    const user = client.db('kdt5').collection('user');
+    const duplicatedUser = await user.findOne({ id: req.body.id });
 
-    await User.create(req.body);
+    if (duplicatedUser) return res.status(404).send(REGISTER_DUPLICATED_MSG);
+
+    await user.insertOne(req.body);
     res.status(200).send(REGISTER_SUCCESS_MSG);
   } catch (err) {
     console.error(err);
@@ -36,7 +35,28 @@ const registerUser = async (req, res) => {
 // 로그인 기능 추가하기
 const loginUser = async (req, res) => {
   try {
-    const findUser = await User.findOne({ id: req.body.id });
+    const client = await mongoClient.connect();
+    const user = await client.db('kdt5').collection('user');
+    // const correctUser = await user.findOne({
+    //   id: req.body.id,
+    //   password: req.body.password,
+    // });
+    // // id와 비번이 같은 유저를 찾으면,
+    // if (correctUser) {
+    //   // 백엔드 세션 만들기
+    //   req.session.login = true;
+    //   req.session.userId = req.body.id;
+    //   // 로그인 쿠키 만들기
+    //   res.cookie('user', req.body.id, {
+    //     maxAge: 1000 * 10,
+    //     httpOnly: true,
+    //     signed: true,
+    //   });
+    //   res.status(200).redirect('/dbBoard');
+    // } else {
+    //   res.status(400).send(LOGIN_FAIL_MSG);
+    // }
+    const findUser = await user.findOne({ id: req.body.id });
     if (!findUser) return res.status(400).send(LOGIN_NOT_REGISTERED_MSG);
 
     if (findUser.password !== req.body.password)
@@ -49,12 +69,41 @@ const loginUser = async (req, res) => {
       httpOnly: true,
       signed: true,
     });
-
+    // res.status(200).send('로그인 성공');
     res.status(200).redirect('/dbBoard');
   } catch (err) {
     console.error(err);
     res.status(500).send(LOGIN_UNEXPECRED_MSG);
   }
 };
+
+// 리팩토링 전
+// const userDB = {
+//   // 중복 회원 찾기
+//   userCheck: async (userId) => {
+//     try {
+//       const client = await mongoClient.connect();
+//       const user = client.db('kdt5').collection('user');
+
+//       const findUser = await user.findOne({ id: userId });
+//       return findUser;
+//     } catch (err) {
+//       console.error(err);
+//     }
+//   },
+//   // 회원가입
+//   userRegister: async (userInfo) => {
+//     try {
+//       const client = await mongoClient.connect();
+//       const user = client.db('kdt5').collection('user');
+
+//       await user.insertOne(userInfo);
+//       return true;
+//     } catch (err) {
+//       console.error(err);
+//     }
+//   },
+// };
+// module.exports = userDB;
 
 module.exports = { registerUser, loginUser };

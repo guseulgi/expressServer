@@ -1,4 +1,7 @@
 const express = require('express');
+const multer = require('multer');
+const fs = require('fs');
+
 const {
   getAllArticle,
   writeArticle,
@@ -8,6 +11,24 @@ const {
 } = require('../controllers/boardController');
 
 const router = express.Router();
+
+// 파일 업로드 설정
+const dir = './uploads';
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, dir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + '_' + Date.now());
+  },
+});
+const limits = {
+  fileSize: 1024 * 1024 * 2,
+};
+
+const upload = multer({ storage, limits });
+
+if (!fs.existsSync(dir)) fs.mkdirSync(dir);
 
 // 로그인 확인용 미들웨어
 function isLogin(req, res, next) {
@@ -61,7 +82,7 @@ router.get('/write', isLogin, (req, res) => {
   res.render('db_board_write');
 });
 
-router.post('/write', isLogin, writeArticle);
+router.post('/write', isLogin, upload.single('img'), writeArticle);
 // // 데이터베이스에 쓴 글을 넣어주기
 // router.post('/write', isLogin, (req, res) => {
 //   if (req.body.title && req.body.content) {
@@ -101,7 +122,7 @@ router.get('/modify/:id', isLogin, getArticle);
 //   });
 // });
 
-router.post('/modify/:id', isLogin, modifyArticle);
+router.post('/modify/:id', isLogin, upload.single('img'), modifyArticle);
 
 // // 글 수정하기
 // router.post('/modify/:id', isLogin, (req, res) => {
